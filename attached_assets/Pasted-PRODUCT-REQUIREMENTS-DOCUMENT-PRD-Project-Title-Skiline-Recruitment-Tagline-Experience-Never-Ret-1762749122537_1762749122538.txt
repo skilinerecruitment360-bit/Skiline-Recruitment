@@ -1,0 +1,232 @@
+PRODUCT REQUIREMENTS DOCUMENT (PRD)
+Project Title: Skiline Recruitment
+Tagline: Experience Never Retires
+Version: 1.0
+Date: November 2025
+
+1. Vision & Goal
+Skiline Recruitment is a warm, people-focused platform that provides career opportunities for retired professionals and housewives aged 35 and above, while also offering limited roles for young individuals in telecalling and field executive positions.
+The mission is to honor experience, empower individuals who’ve paused their careers, and give them a meaningful chance to contribute again.
+Goal: To create a simple, warm, and inspiring website that attracts visitors, builds trust, and converts them into form submissions.
+
+2. Target Audience
+Primary:
+
+Retired professionals (60+)
+
+Housewives (35+)
+
+Secondary:
+
+Young female telecallers (20–25)
+
+Field executives (20–30)
+
+Emotional Objective:
+The site should make visitors feel valued, capable, and welcomed back into the professional world.
+
+3. Brand Tone & Visual Direction
+Tone: A mix of trustworthy professionalism and emotional warmth.
+Visual Mood: Friendly, hopeful, dignified, and inclusive.
+
+Primary Colors:
+
+Soft Blue (#A8C7E0) – trust and calmness
+
+Warm Beige (#F5E8C7) – comfort and familiarity
+
+Olive Green (#A3B18A) – renewal and balance
+
+White (#FFFFFF) – simplicity and clarity
+
+Typography:
+
+Headings: Serif (e.g., Merriweather, Playfair Display)
+
+Body: Sans-serif (e.g., Open Sans, Lato)
+
+4. Sitemap & Page Overview
+
+Pages:
+
+Home
+
+About Us
+
+Opportunities
+
+Join Us
+
+Gallery
+
+Contact
+
+1. Home Page
+Purpose: Create immediate trust, emotional connection, and guide users to register.
+
+Content:
+
+Hero section with tagline: “Experience Never Retires.”
+Subtext: “Reignite your professional journey with opportunities designed just for you.”
+
+Prominent CTA button: “Join Us” → goes to registration form.
+
+Short 3-line intro on Skiline’s mission.
+
+Section with 4 cards (Retired Professionals, Housewives 35+, Telecalling, Field Executives) linking to “Join Us”.
+
+Footer with contact info and copyright.
+
+SEO Keywords: retired job opportunities, second career options, jobs for seniors, work for housewives, flexible career after 35, experience never retires.
+
+2. About Us
+Purpose: Build trust and explain who Skiline is.
+
+Content:
+“At Skiline Recruitment, we believe that experience never goes out of style. Founded with the mission to reconnect skilled individuals to the workforce, we create meaningful opportunities for those ready to return.”
+Core values: Experience, Dignity, Opportunity, Inclusion.
+CTA: “Explore Opportunities” → links to Opportunities page.
+
+SEO Keywords: about Skiline Recruitment, jobs for retired people, career restart for women, return to work India.
+
+3. Opportunities Page
+Purpose: Display available opportunity categories with brief job descriptions.
+
+Categories:
+
+Retired Professionals (55+) – Share your wisdom and continue contributing in flexible, dignified roles suited to your experience.
+
+Housewives (35+) – Restart your career journey with part-time or flexible roles tailored for homemakers.
+
+Tele Calling (Female, 20–25) – Engage with clients over the phone, manage follow-ups, and assist our HR team.
+
+Field Executives (20–30) – Represent Skiline in the field, generate leads, and help us reach more professionals.
+
+CTA: “Join Us” button below list.
+
+SEO Keywords: career restart India, jobs for retired professionals, telecalling jobs, flexible field jobs, work for housewives after 35.
+
+4. Join Us Page
+Purpose: Main registration page for all applicants.
+
+Flow:
+
+User lands on “Join Us” page.
+
+Sees 4 options to choose from:
+a) Retired Professionals
+b) Housewives (35+)
+c) Tele Calling (Female, 20–25)
+d) Field Executives (20–30)
+
+Once an option is selected, relevant form fields appear.
+
+Form Fields:
+
+For Retired Professionals:
+
+Name
+
+Date of Birth
+
+Contact Number
+
+Email
+
+Education Qualification
+
+Last Designation Title
+
+Years of Experience (Dropdown: 5+, 10+, 15+, 25+)
+
+For Housewives (35+), Telecalling, and Field Executives:
+
+Name
+
+Date of Birth
+
+Contact Number
+
+Email
+
+Education Qualification
+
+Form Submission:
+
+Data sent directly to company email.
+
+Confirmation message: “Thank you! Our team will reach out soon.”
+
+SEO Keywords: join Skiline Recruitment, apply for flexible jobs, career for retired professionals, job application form India.
+
+5. Gallery Page
+Purpose: Display photos of team, events, and community.
+
+Content:
+
+Clean gallery layout with lightbox feature.
+
+Photos showcasing real people (diverse, friendly, relatable).
+
+Optional captions for each photo (e.g., “Our team welcoming new members”, “Empowering professionals to restart”).
+
+SEO Keywords: Skiline Recruitment gallery, our community, professional opportunities India.
+
+6. Contact Page
+Purpose: Allow visitors to easily reach out.
+
+Content:
+
+Contact Form (Name, Email, Message)
+
+Company Email: info@skilinerecruitment.com
+ (placeholder)
+
+Phone: +91 9XXXXXXXXX (placeholder)
+
+Address: (placeholder)
+
+Embedded Google Map showing company location.
+
+Text: “We’d love to hear from you.”
+
+SEO Keywords: contact Skiline Recruitment, recruitment company India, jobs for retired people contact, career assistance.
+
+5. Functional Requirements
+
+Fully responsive and mobile-friendly.
+
+All form submissions go to the company’s email.
+
+Large fonts, clear navigation for older users.
+
+Accessibility-compliant colors and text contrast.
+
+Basic animation for warmth and modern look.
+
+SEO-optimized metadata, alt tags for images.
+
+Secure HTTPS hosting.
+
+6. Emotional & UX Design Goals
+
+Warm and welcoming tone.
+
+Trust and simplicity in layout.
+
+Easy navigation and readability.
+
+Motivating, emotionally positive imagery.
+
+7. Success Metrics
+
+Conversion rate: % of visitors submitting forms.
+
+Engagement time: average 2+ minutes per visitor.
+
+Bounce rate below 50%.
+
+SEO ranking within top 5 for “jobs for retired professionals in India”.
+
+Summary:
+Skiline Recruitment’s website will be a heartwarming, professional, and conversion-focused platform that celebrates experience and welcomes individuals back into meaningful careers.
