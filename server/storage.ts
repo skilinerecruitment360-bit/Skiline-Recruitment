@@ -1,37 +1,64 @@
-import { type User, type InsertUser } from "@shared/schema";
 import { randomUUID } from "crypto";
+import type { ApplicationForm, ContactForm } from "@shared/schema";
 
-// modify the interface with any CRUD methods
-// you might need
-
+// Storage interface for Skiline Recruitment
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Application submissions
+  createApplication(application: ApplicationForm): Promise<ApplicationSubmission>;
+  getApplications(): Promise<ApplicationSubmission[]>;
+  
+  // Contact form submissions
+  createContact(contact: ContactForm): Promise<ContactSubmission>;
+  getContacts(): Promise<ContactSubmission[]>;
+}
+
+export interface ApplicationSubmission extends ApplicationForm {
+  id: string;
+  submittedAt: Date;
+}
+
+export interface ContactSubmission extends ContactForm {
+  id: string;
+  submittedAt: Date;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private applications: Map<string, ApplicationSubmission>;
+  private contacts: Map<string, ContactSubmission>;
 
   constructor() {
-    this.users = new Map();
+    this.applications = new Map();
+    this.contacts = new Map();
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async createApplication(application: ApplicationForm): Promise<ApplicationSubmission> {
     const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    const submission: ApplicationSubmission = {
+      ...application,
+      id,
+      submittedAt: new Date(),
+    };
+    this.applications.set(id, submission);
+    return submission;
+  }
+
+  async getApplications(): Promise<ApplicationSubmission[]> {
+    return Array.from(this.applications.values());
+  }
+
+  async createContact(contact: ContactForm): Promise<ContactSubmission> {
+    const id = randomUUID();
+    const submission: ContactSubmission = {
+      ...contact,
+      id,
+      submittedAt: new Date(),
+    };
+    this.contacts.set(id, submission);
+    return submission;
+  }
+
+  async getContacts(): Promise<ContactSubmission[]> {
+    return Array.from(this.contacts.values());
   }
 }
 
