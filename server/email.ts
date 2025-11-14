@@ -1,6 +1,13 @@
 import nodemailer from "nodemailer";
 import type { ApplicationForm, ContactForm } from "@shared/schema";
 
+// Debug log environment variables
+console.log('Environment Variables:', {
+  EMAIL_USER: process.env.EMAIL_USER ? '***' : 'Not set',
+  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? '***' : 'Not set',
+  RECIPIENT_EMAIL: process.env.RECIPIENT_EMAIL || 'Using default'
+});
+
 // Email configuration
 const EMAIL_USER = process.env.EMAIL_USER || "noreply@skilinerecruitment.com";
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || "";
@@ -15,11 +22,13 @@ function getTransporter() {
   // If credentials are not configured, use a no-op transporter
   if (!EMAIL_PASSWORD) {
     console.log("⚠️  Email credentials not configured. Using no-op transporter.");
+    console.log("ℹ️  EMAIL_PASSWORD is", EMAIL_PASSWORD ? 'set' : 'not set');
     // Create a fake transporter that doesn't actually send
     transporter = {
       sendMail: async () => {
-        console.log("📧 Email would be sent (no-op mode - credentials not configured)");
-        return { messageId: 'no-op' };
+        const message = "📧 Email would be sent (no-op mode - credentials not configured)";
+        console.log(message);
+        return { messageId: 'no-op', message };
       }
     } as any;
     return transporter;
@@ -94,48 +103,101 @@ function formatContactEmail(contact: ContactForm): string {
   `;
 }
 
-// Send application email
-export async function sendApplicationEmail(application: ApplicationForm): Promise<void> {
-  const transport = getTransporter();
+// Format confirmation email for applicant
+function formatConfirmationEmail(application: ApplicationForm): string {
+  return `
+    <h2>Thank You for Your Application, ${application.name}!</h2>
+    <hr />
+    <p>We have received your application for the position. Our team will review your details and get back to you soon.</p>
+    
+    <h3>Application Details:</h3>
+    <p><strong>Name:</strong> ${application.name}</p>
+    <p><strong>Email:</strong> ${application.email}</p>
+    <p><strong>Contact Number:</strong> ${application.contactNumber}</p>
+    <p><strong>Education Qualification:</strong> ${application.educationQualification}</p>
+    
+    <hr />
+    <p style="color: #666; font-size: 14px;">
+      This is an automated message. Please do not reply to this email.
+    </p>
+  `;
+}
 
-  const categoryNames = {
-    retired: "Retired Professional",
-    housewife: "Housewife (35+)",
-    telecalling: "Telecalling",
-    field: "Field Executive",
-  };
+// Send application emails (to admin and optionally to applicant if email is provided)
+export async function sendApplicationEmail(application: ApplicationForm): Promise<{ success: boolean; message: string }> {
+  const transport = getTransporter();
+  
+  if (!transport) {
+    const errorMsg = 'Email transport not initialized';
+    console.error('❌', errorMsg);
+    return { success: false, message: errorMsg };
+  }
 
   try {
-    await transport.sendMail({
+    // Always send email to admin
+    const adminEmailPromise = transport.sendMail({
       from: `"Skiline Recruitment" <${EMAIL_USER}>`,
       to: RECIPIENT_EMAIL,
-      subject: `New Application: ${categoryNames[application.category]} - ${application.name}`,
+      subject: `New Application: ${application.name}`,
       html: formatApplicationEmail(application),
     });
+
+    // Only send confirmation email if email is provided
+    const emailPromises = [adminEmailPromise];
     
-    console.log("✅ Application email sent successfully to", RECIPIENT_EMAIL);
+    if (application.email) {
+      const confirmationEmailPromise = transport.sendMail({
+        from: `"Skiline Recruitment" <${EMAIL_USER}>`,
+        to: application.email,
+        subject: 'Application Received - Skiline Recruitment',
+        html: formatConfirmationEmail(application),
+      });
+      emailPromises.push(confirmationEmailPromise);
+    }
+
+    // Wait for all emails to complete
+    const results = await Promise.all(emailPromises);
+    
+    console.log('📧 Emails sent successfully:', {
+      adminEmail: results[0].messageId,
+      ...(application.email && { confirmationEmail: results[1]?.messageId })
+    });
+    
+    return { 
+      success: true, 
+      message: `Emails sent successfully${application.email ? '' : ' (admin only)'}` 
+    };
   } catch (error) {
-    console.error("❌ Failed to send application email:", error);
-    throw new Error("Failed to send application email");
+    const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+    console.error('❌ Failed to send application emails:', errorMsg);
+    return { success: false, message: `Failed to send emails: ${errorMsg}` };
   }
 }
 
 // Send contact form email
-export async function sendContactEmail(contact: ContactForm): Promise<void> {
+export async function sendContactEmail(contact: ContactForm): Promise<{ success: boolean; message: string }> {
   const transport = getTransporter();
+  
+  if (!transport) {
+    const errorMsg = 'Email transport not initialized';
+    console.error('❌', errorMsg);
+    return { success: false, message: errorMsg };
+  }
 
   try {
-    await transport.sendMail({
-      from: `"Skiline Recruitment" <${EMAIL_USER}>`,
+    const info = await transport.sendMail({
+      from: `"${contact.name}" <${contact.email}>`,
       to: RECIPIENT_EMAIL,
       replyTo: contact.email,
-      subject: `Contact Form: ${contact.name}`,
+      subject: `New Contact Form: ${contact.name}`,
       html: formatContactEmail(contact),
     });
     
-    console.log("✅ Contact email sent successfully to", RECIPIENT_EMAIL);
+    console.log('📧 Contact email sent successfully:', info.messageId);
+    return { success: true, message: 'Email sent successfully' };
   } catch (error) {
-    console.error("❌ Failed to send contact email:", error);
-    throw new Error("Failed to send contact email");
+    const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+    console.error('❌ Failed to send contact email:', errorMsg);
+    return { success: false, message: `Failed to send email: ${errorMsg}` };
   }
 }

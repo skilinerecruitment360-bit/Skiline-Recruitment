@@ -37,6 +37,7 @@ export default function Contact() {
     defaultValues: {
       name: "",
       email: "",
+      phone: "",
       message: "",
     },
   });
@@ -158,7 +159,7 @@ export default function Contact() {
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-lg">Email</FormLabel>
+                            <FormLabel className="text-lg">Email <span className="text-muted-foreground text-sm">(Optional)</span></FormLabel>
                             <FormControl>
                               <Input
                                 type="email"
@@ -167,6 +168,36 @@ export default function Contact() {
                                 data-testid="input-contact-email"
                                 {...field}
                               />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field: { onChange, ...field } }) => (
+                          <FormItem>
+                            <FormLabel className="text-lg">Phone Number</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-muted-foreground">
+                                  +91
+                                </div>
+                                <Input
+                                  type="tel"
+                                  placeholder="12345 67890"
+                                  className="text-lg py-6 pl-12"
+                                  data-testid="input-contact-phone"
+                                  onChange={(e) => {
+                                    // Remove any non-digit characters and limit to 10 digits
+                                    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                    onChange(digits);
+                                  }}
+                                  value={field.value}
+                                />
+                              </div>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -226,7 +257,7 @@ export default function Contact() {
                         href="mailto:info@skilinerecruitment.com"
                         className="text-lg text-muted-foreground hover:text-primary transition-colors"
                       >
-                        info@skilinerecruitment.com
+                        skilinerecruitment360@gmail.com
                       </a>
                     </div>
                   </div>
@@ -238,7 +269,8 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-xl mb-1">Phone</h3>
                       <p className="text-lg text-muted-foreground">
-                        +91 9XXXXXXXXX
+                        +91 98410 02700<br />
+                        +91 95510 87099
                       </p>
                     </div>
                   </div>
@@ -250,9 +282,8 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-xl mb-1">Address</h3>
                       <p className="text-lg text-muted-foreground leading-relaxed">
-                        Your Address Here<br />
-                        City, State, PIN<br />
-                        India
+                        No 8, 44th Street, Ashok Nagar<br />
+                        Chennai - 600083<br />
                       </p>
                     </div>
                   </div>
@@ -264,7 +295,7 @@ export default function Contact() {
                 <CardContent className="p-0">
                   <div className="aspect-video bg-muted rounded-lg overflow-hidden" data-testid="map-placeholder">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30591910525!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.9483921937604!2d80.21093337490694!3d13.038956987282644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267fe22b84d3f%3A0x33204efb5e1fcbdf!2sSkiline%20Recruitment%20(Training%20%26%20Development%20Center%20of%20Kotak%20Insurance)!5e0!3m2!1sen!2sin!4v1762762519195!5m2!1sen!2sin"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}

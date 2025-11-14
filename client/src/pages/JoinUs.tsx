@@ -33,7 +33,14 @@ import {
   type OpportunityCategory,
   type ApplicationForm,
 } from "@shared/schema";
-import { Briefcase, Heart, Phone, Users, CheckCircle } from "lucide-react";
+import { Briefcase, Heart, Phone, Users, CheckCircle, Calendar } from "lucide-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+// Reusable component for required field indicator
+const RequiredField = () => (
+  <span className="text-red-500 ml-1">*</span>
+);
 
 export default function JoinUs() {
   usePageMeta({
@@ -52,24 +59,52 @@ export default function JoinUs() {
       icon: Briefcase,
       title: "Retired Professionals",
       description: "Share your wisdom in flexible, dignified roles",
+      color: "text-primary",
+      benefits: [
+        "Flexible working hours",
+        "Respect for your expertise",
+        "Mentorship opportunities",
+        "Work-life balance"
+      ]
     },
     {
       id: "housewife" as const,
       icon: Heart,
       title: "Housewives (35+)",
       description: "Restart your career with flexible opportunities",
+      color: "text-green-500",
+      benefits: [
+        "Part-time opportunities",
+        "Flexible schedules",
+        "Skill development support",
+        "Supportive environment"
+      ]
     },
     {
       id: "telecalling" as const,
       icon: Phone,
       title: "Tele Calling (Female, 20-25)",
       description: "Build communication skills and career growth",
+      color: "text-green-500",
+      benefits: [
+        "Communication skills training",
+        "Professional development",
+        "Career growth path",
+        "Supportive team culture"
+      ]
     },
     {
       id: "field" as const,
       icon: Users,
       title: "Field Executives (20-30)",
       description: "Represent us in the field and grow your network",
+      color: "text-primary",
+      benefits: [
+        "Travel opportunities",
+        "Performance incentives",
+        "Leadership training",
+        "Networking growth"
+      ]
     },
   ];
 
@@ -206,26 +241,36 @@ export default function JoinUs() {
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground text-center mb-12">
               Choose Your Category
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {categories.map((category) => {
                 const Icon = category.icon;
                 return (
                   <Card
                     key={category.id}
-                    className="hover-elevate active-elevate-2 transition-all duration-300 cursor-pointer hover:shadow-xl"
+                    className="cursor-pointer hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col"
                     onClick={() => handleCategorySelect(category.id)}
-                    data-testid={`card-category-${category.id}`}
                   >
                     <CardHeader className="space-y-4">
-                      <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <Icon className="h-8 w-8 text-primary" />
+                      <div className="flex items-center space-x-4">
+                        <div className="p-3 rounded-lg bg-primary/10">
+                          <Icon className="h-8 w-8 text-primary" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-2xl">{category.title}</CardTitle>
+                          <CardDescription>{category.description}</CardDescription>
+                        </div>
                       </div>
-                      <CardTitle className="font-serif text-2xl md:text-3xl">
-                        {category.title}
-                      </CardTitle>
-                      <CardDescription className="text-lg leading-relaxed">
-                        {category.description}
-                      </CardDescription>
+                      <div className="pt-4 border-t">
+                        <h4 className="font-semibold text-foreground mb-3">What We Offer:</h4>
+                        <ul className="space-y-2">
+                          {category.benefits.map((benefit, index) => (
+                            <li key={index} className="flex items-start gap-2 text-muted-foreground">
+                              <CheckCircle className={`h-5 w-5 mt-0.5 flex-shrink-0 ${category.color || 'text-primary'}`} />
+                              <span>{benefit}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </CardHeader>
                   </Card>
                 );
@@ -235,7 +280,7 @@ export default function JoinUs() {
         </section>
       ) : (
         /* Application Form */
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-16 md:py-24 bg-accent/50">
           <div className="max-w-3xl mx-auto px-6 md:px-8">
             <Card>
               <CardHeader className="space-y-4">
@@ -262,7 +307,9 @@ export default function JoinUs() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-lg">Full Name</FormLabel>
+                          <FormLabel className="text-lg">
+                            Full Name <RequiredField />
+                          </FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Enter your full name"
@@ -279,36 +326,62 @@ export default function JoinUs() {
                     <FormField
                       control={form.control}
                       name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-lg">Date of Birth</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="date"
-                              className="text-lg py-6"
-                              data-testid="input-dob"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                      render={({ field }) => {
+                        const dateValue = field.value ? new Date(field.value) : null;
+                        return (
+                          <FormItem className="flex flex-col">
+                            <FormLabel className="text-lg">
+                              Date of Birth <RequiredField />
+                            </FormLabel>
+                            <div className="relative">
+                              <DatePicker
+                                selected={dateValue}
+                                onChange={(date) => field.onChange(date?.toISOString().split('T')[0])}
+                                dateFormat="dd/MM/yyyy"
+                                placeholderText="Select date of birth"
+                                className="flex h-14 w-full rounded-md border border-input bg-background px-3 py-2 text-lg ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                                showYearDropdown
+                                scrollableYearDropdown
+                                yearDropdownItemNumber={100}
+                                maxDate={new Date()}
+                                showMonthDropdown
+                                dropdownMode="select"
+                                data-testid="input-dob"
+                              />
+                              <Calendar className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
                     />
 
                     <FormField
                       control={form.control}
                       name="contactNumber"
-                      render={({ field }) => (
+                      render={({ field: { onChange, ...field } }) => (
                         <FormItem>
-                          <FormLabel className="text-lg">Contact Number</FormLabel>
+                          <FormLabel className="text-lg">
+                            Contact Number <RequiredField />
+                          </FormLabel>
                           <FormControl>
-                            <Input
-                              type="tel"
-                              placeholder="+91 XXXXXXXXXX"
-                              className="text-lg py-6"
-                              data-testid="input-phone"
-                              {...field}
-                            />
+                            <div className="relative">
+                              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-muted-foreground">
+                                +91
+                              </div>
+                              <Input
+                                type="tel"
+                                placeholder="98765 43210"
+                                className="text-lg py-6 pl-12"
+                                data-testid="input-phone"
+                                onChange={(e) => {
+                                  // Remove any non-digit characters and limit to 10 digits
+                                  const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                  onChange(digits);
+                                }}
+                                value={field.value}
+                              />
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -320,7 +393,9 @@ export default function JoinUs() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-lg">Email Address</FormLabel>
+                          <FormLabel className="text-lg">
+                            Email Address <span className="text-muted-foreground text-sm">(Optional)</span>
+                          </FormLabel>
                           <FormControl>
                             <Input
                               type="email"
@@ -340,7 +415,9 @@ export default function JoinUs() {
                       name="educationQualification"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-lg">Education Qualification</FormLabel>
+                          <FormLabel className="text-lg">
+                            Education Qualification <RequiredField />
+                          </FormLabel>
                           <FormControl>
                             <Input
                               placeholder="e.g., Bachelor's in Business Administration"
@@ -361,7 +438,9 @@ export default function JoinUs() {
                           name="lastDesignationTitle"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-lg">Last Designation Title</FormLabel>
+                              <FormLabel className="text-lg">
+                                Last Designation Title <RequiredField />
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   placeholder="e.g., Senior Manager"
@@ -380,7 +459,9 @@ export default function JoinUs() {
                           name="yearsOfExperience"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-lg">Years of Experience</FormLabel>
+                              <FormLabel className="text-lg">
+                                Years of Experience <RequiredField />
+                              </FormLabel>
                               <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
                                   <SelectTrigger className="text-lg py-6" data-testid="select-experience">

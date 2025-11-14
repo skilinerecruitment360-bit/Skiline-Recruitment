@@ -9,7 +9,13 @@ export const retiredProfessionalSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   dateOfBirth: z.string().min(1, "Date of birth is required"),
   contactNumber: z.string().min(10, "Please enter a valid contact number"),
-  email: z.string().email("Please enter a valid email address"),
+  email: z
+    .string()
+    .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Please enter a valid email address",
+    })
+    .optional()
+    .or(z.literal('')),
   educationQualification: z.string().min(1, "Education qualification is required"),
   lastDesignationTitle: z.string().min(1, "Last designation is required"),
   yearsOfExperience: z.enum(['5+', '10+', '15+', '25+'], {
@@ -23,7 +29,13 @@ export const housewifeSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   dateOfBirth: z.string().min(1, "Date of birth is required"),
   contactNumber: z.string().min(10, "Please enter a valid contact number"),
-  email: z.string().email("Please enter a valid email address"),
+  email: z
+    .string()
+    .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Please enter a valid email address",
+    })
+    .optional()
+    .or(z.literal('')),
   educationQualification: z.string().min(1, "Education qualification is required"),
 });
 
@@ -33,7 +45,13 @@ export const telecallingSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   dateOfBirth: z.string().min(1, "Date of birth is required"),
   contactNumber: z.string().min(10, "Please enter a valid contact number"),
-  email: z.string().email("Please enter a valid email address"),
+  email: z
+    .string()
+    .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Please enter a valid email address",
+    })
+    .optional()
+    .or(z.literal('')),
   educationQualification: z.string().min(1, "Education qualification is required"),
 });
 
@@ -43,7 +61,13 @@ export const fieldExecutiveSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   dateOfBirth: z.string().min(1, "Date of birth is required"),
   contactNumber: z.string().min(10, "Please enter a valid contact number"),
-  email: z.string().email("Please enter a valid email address"),
+  email: z
+    .string()
+    .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Please enter a valid email address",
+    })
+    .optional()
+    .or(z.literal('')),
   educationQualification: z.string().min(1, "Education qualification is required"),
 });
 
@@ -58,7 +82,17 @@ export const applicationSchema = z.discriminatedUnion('category', [
 // Contact Form
 export const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+  email: z
+    .string()
+    .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Please enter a valid email address",
+    })
+    .optional()
+    .or(z.literal('')),
+  phone: z.string()
+    .min(10, "Phone number must be at least 10 digits")
+    .max(10, "Phone number cannot exceed 10 digits")
+    .regex(/^\d+$/, "Phone number can only contain digits"),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
 

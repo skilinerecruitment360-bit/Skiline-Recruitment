@@ -4,12 +4,14 @@ import { Footer } from "@/components/Footer";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import seniorProfessional from "@assets/generated_images/Confident_senior_professional_headshot_04c24947.png";
-import professionalWoman from "@assets/generated_images/Professional_woman_restarting_career_b68e1b83.png";
-import telecaller from "@assets/generated_images/Young_telecaller_professional_workspace_9de48930.png";
-import teamMeeting from "@assets/generated_images/Diverse_team_collaborative_meeting_1a3f8f55.png";
-import officeSpace from "@assets/generated_images/Welcoming_modern_office_space_0a0a8ac2.png";
-import heroImage from "@assets/generated_images/Diverse_professionals_collaborating_warmly_a701da27.png";
+
+// Import all gallery images using Vite's import.meta.glob
+const galleryImages = Object.values(
+  import.meta.glob('../../../attached_assets/generated_images/*.{webp,jpg,jpeg,png}', { 
+    eager: true,
+    as: 'url' 
+  })
+);
 
 export default function Gallery() {
   usePageMeta({
@@ -24,34 +26,64 @@ export default function Gallery() {
 
   const images = [
     {
-      src: heroImage,
-      alt: "Diverse professionals collaborating in modern office",
-      caption: "Our team welcoming new members",
+      src: galleryImages[0],
+      alt: "Professional team collaboration",
+      caption: "Our dedicated team working together",
     },
     {
-      src: seniorProfessional,
-      alt: "Confident senior professional at desk",
-      caption: "Experienced professionals sharing their wisdom",
+      src: galleryImages[1],
+      alt: "Team meeting in progress",
+      caption: "Brainstorming new ideas and strategies",
     },
     {
-      src: professionalWoman,
-      alt: "Professional woman at workspace",
-      caption: "Empowering professionals to restart their careers",
+      src: galleryImages[2],
+      alt: "Office workspace",
+      caption: "Our comfortable and modern workspace",
     },
     {
-      src: telecaller,
-      alt: "Young telecaller at work",
-      caption: "Building communication skills and career growth",
+      src: galleryImages[3],
+      alt: "Team celebration",
+      caption: "Celebrating our achievements together",
     },
     {
-      src: teamMeeting,
-      alt: "Diverse team in collaborative meeting",
-      caption: "Inclusive workplace culture",
+      src: galleryImages[4],
+      alt: "Professional development",
+      caption: "Continuous learning and growth",
     },
     {
-      src: officeSpace,
-      alt: "Welcoming modern office environment",
-      caption: "A warm and professional environment",
+      src: galleryImages[5],
+      alt: "Team building activity",
+      caption: "Strengthening our team bonds",
+    },
+    {
+      src: galleryImages[6],
+      alt: "Client meeting",
+      caption: "Delivering excellent service to our clients",
+    },
+    {
+      src: galleryImages[7],
+      alt: "Office environment",
+      caption: "Our welcoming office space",
+    },
+    {
+      src: galleryImages[8],
+      alt: "Team collaboration",
+      caption: "Working together towards success",
+    },
+    {
+      src: galleryImages[9],
+      alt: "Professional networking",
+      caption: "Building valuable connections",
+    },
+    {
+      src: galleryImages[10],
+      alt: "Team celebration",
+      caption: "Recognizing our achievements",
+    },
+    {
+      src: galleryImages[11],
+      alt: "Office culture",
+      caption: "A positive and inclusive work environment",
     },
   ];
 

@@ -14,18 +14,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Store the application
       const submission = await storage.createApplication(validatedData);
       
-      // Send email notification
-      try {
-        await sendApplicationEmail(validatedData);
-      } catch (emailError) {
-        console.error("Email sending failed, but application was stored:", emailError);
-        // Continue even if email fails - application is saved
-      }
+      // Send admin notification email in the background (non-blocking)
+      // Always send to admin, but only send confirmation if email is provided
+      sendApplicationEmail(validatedData)
+        .then(result => {
+          if (!result.success) {
+            console.warn("⚠️  Email sending had issues, but application was stored:", result.message);
+          } else {
+            console.log("✅ Admin notification sent successfully");
+            if (validatedData.email) {
+              console.log("✅ Confirmation email sent to applicant");
+            }
+          }
+        })
+        .catch(error => {
+          console.error("⚠️  Background email sending failed:", error);
+        });
       
+      // Since we're sending emails in the background, we don't wait for them to complete
       res.status(201).json({
         success: true,
-        message: "Application submitted successfully",
+        message: "Application submitted successfully. You will receive a confirmation email shortly.",
         submissionId: submission.id,
+        emailInitiated: true
       });
     } catch (error) {
       console.error("Application submission error:", error);
@@ -40,6 +51,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.status(500).json({
           success: false,
           message: "Failed to submit application. Please try again.",
+          error: error instanceof Error ? error.message : 'Unknown error'
         });
       }
     }
